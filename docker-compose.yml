@@ -1,0 +1,54 @@
+version: "2"
+
+services:
+  master1:
+    build: ./nifi-base
+    container_name: "nifi_node1"
+    ports:
+      - "8080:8080"
+    depends_on:
+      - zoo1
+      - zoo2
+      - zoo3
+  master2:
+    build: ./nifi-base
+    container_name: "nifi_node2"
+    ports:
+      - "8081:8080"
+    depends_on:
+      - zoo1
+      - zoo2
+      - zoo3
+  master3:
+    build: ./nifi-base
+    container_name: "nifi_node3"
+    ports:
+      - "8082:8080"
+    depends_on:
+      - zoo1
+      - zoo2
+      - zoo3
+  zoo1:
+      image: zookeeper
+      restart: always
+      ports:
+          - 2181:2181
+      environment:
+          ZOO_MY_ID: 1
+          ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=zoo2:2888:3888 server.3=zoo3:2888:3888
+  zoo2:
+      image: zookeeper
+      restart: always
+      ports:
+          - 2182:2181
+      environment:
+          ZOO_MY_ID: 2
+          ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=zoo2:2888:3888 server.3=zoo3:2888:3888
+  zoo3:
+      image: zookeeper
+      restart: always
+      ports:
+          - 2183:2181
+      environment:
+          ZOO_MY_ID: 3
+          ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=zoo2:2888:3888 server.3=zoo3:2888:3888
